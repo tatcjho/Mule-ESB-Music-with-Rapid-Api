@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d0fb7ba0-aabb-4123-8d98-4aa2968512a7" >
+		<http:listener-connection host="localhost" port="8888" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8304090a-22b2-4e54-8f06-cccbd1c3af8b">
+		<http:request-connection protocol="HTTPS" host="shazam.p.rapidapi.com" />
+	</http:request-config>
+	<flow name="shezaaaamFlow" doc:id="75524f78-132a-4f17-b6d1-cb8ef57b3e0a" >
+		<http:listener doc:name="Listener" doc:id="49c09504-0bb3-4e2d-be2a-f808ac358690" config-ref="HTTP_Listener_config" path="getMusica/{term}"/>
+		<http:request method="GET" doc:name="Request" doc:id="9a8ca27b-c81d-4cb5-ad0f-6536e047b502" config-ref="HTTP_Request_configuration" path="/search">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"x-rapidapi-key" : "43d6f5d9demsh11321ffeadb78cbp195337jsn8ea2dfc6f810",
+	"x-rapidapi-host" : "shazam.p.rapidapi.com"
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"term" : attributes.uriParams.term
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+</mule>
